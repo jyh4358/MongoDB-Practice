@@ -43,8 +43,13 @@ public class DemomongoApplication {
 
 //            repository.save(student);
 
-            Student byEmail = repository.findByEmail("test2@gamil.com");
-            System.out.println("byEmail = " + byEmail);
+            repository.findByEmail("test2@gamil.com")
+                    .ifPresentOrElse(findStudent -> {
+                        System.out.println("Already exists  " + findStudent);
+                    }, () -> {
+                        System.out.println("Inserting student " + student);
+                        repository.save(student);
+                    });
 
         };
 
