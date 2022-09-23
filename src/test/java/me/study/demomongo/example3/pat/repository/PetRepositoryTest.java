@@ -30,6 +30,8 @@ class PetRepositoryTest extends BaseMongoTest {
         // given
         Pet pet = Pet.builder().kind("Cat").name("나비").age(2).build();
         petRepository.save(pet);
+        petRepository.insert(pet);
+
 
         // when & then
         Pet findPet = petRepository.findById(pet.getId()).get();
@@ -46,13 +48,7 @@ class PetRepositoryTest extends BaseMongoTest {
     public void findAllTest() {
 
         //given
-        List<Pet> pets = Arrays.asList(
-                Pet.builder().kind("Dog").name("멍멍이").age(1).build(),
-                Pet.builder().kind("Dog").name("아지").age(2).build(),
-                Pet.builder().kind("Dog").name("깜돌이").age(5).build(),
-                Pet.builder().kind("Cat").name("야옹이").age(4).build(),
-                Pet.builder().kind("Cat").name("나비").age(2).build()
-        );
+        List<Pet> pets = getPets();
 
         petRepository.saveAll(pets);
 
@@ -78,5 +74,52 @@ class PetRepositoryTest extends BaseMongoTest {
         // then
         Pet findPet = petRepository.findById(pet.getId()).get();
         assertThat(findPet.getName()).isEqualTo(pet.getName());
+    }
+
+    @DisplayName("Pet 삭제 테스트")
+    @Test
+    public void deleteTest() {
+
+        //given
+        List<Pet> pets = getPets();
+
+        petRepository.saveAll(pets);
+
+        //when
+        petRepository.deleteAll(pets);
+
+        //then
+        List<Pet> findPets = petRepository.findAll();
+        assertThat(findPets.size()).isEqualTo(0);
+    }
+
+
+    @DisplayName("Pet 컬렉션을 멤버변수로 가지고 있는 Pet 객체를 저장 테스트")
+    @Test
+    public void insertSiblingTest() {
+
+        //given
+        List<Pet> sibling = getPets();
+        Pet pet = Pet.builder().kind("Dog").age(0).name("랑이").sibling(sibling).build();
+        petRepository.save(pet);
+
+        //when & then
+        Pet findPet = petRepository.findById(pet.getId()).get();
+        assertThat(findPet.getSibling().size()).isEqualTo(5);
+
+    }
+
+
+
+
+    private List<Pet> getPets() {
+        List<Pet> pets = Arrays.asList(
+                Pet.builder().kind("Dog").name("멍멍이").age(1).build(),
+                Pet.builder().kind("Dog").name("아지").age(2).build(),
+                Pet.builder().kind("Dog").name("깜돌이").age(5).build(),
+                Pet.builder().kind("Cat").name("야옹이").age(4).build(),
+                Pet.builder().kind("Cat").name("나비").age(2).build()
+        );
+        return pets;
     }
 }

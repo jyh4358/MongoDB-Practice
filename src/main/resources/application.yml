@@ -6,3 +6,14 @@ spring:
       username: root
       password: example
       auto-index-creation: true
+
+
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
