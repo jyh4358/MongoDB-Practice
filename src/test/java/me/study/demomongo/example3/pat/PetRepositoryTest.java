@@ -1,4 +1,4 @@
-package me.study.demomongo.example3.pat.repository;
+package me.study.demomongo.example3.pat;
 
 import me.study.demomongo.example3.common.BaseMongoTest;
 import me.study.demomongo.pat.model.Pet;
